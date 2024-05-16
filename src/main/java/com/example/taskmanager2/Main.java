@@ -38,6 +38,7 @@ public class Main extends Application {
         root.setBackground(new Background(background));
 
         Scene scene = new Scene(root, 500, 350);
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
 
         Button addButton = new Button("Lisa ülesanne");
         Button listButton = new Button("Vaata ülesandeid");
@@ -74,6 +75,7 @@ public class Main extends Application {
             scrollPane.setFitToWidth(true);
 
             Stage dialogStage = new Stage();
+            dialogStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
             dialogStage.setScene(new Scene(scrollPane));
             dialogStage.setTitle("Ülesannete nimekiri");
 
@@ -105,6 +107,7 @@ public class Main extends Application {
 
                 Scene scene2 = new Scene(root2);
                 Stage randomTaskStage = new Stage();
+                randomTaskStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
                 randomTaskStage.setScene(scene2);
 
                 scene2.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -171,6 +174,9 @@ public class Main extends Application {
         Dialog<Ülesanne> dialog = new Dialog<>();
         dialog.setTitle("Lisa uus ülesanne");
         dialog.setHeaderText("Sisesta ülesande info");
+
+        Stage stage = (Stage) dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Main.class.getResourceAsStream("/icon.png")));
 
         Label typeLabel = new Label("Tüüp:");
         ComboBox<String> typeComboBox = new ComboBox<>();
