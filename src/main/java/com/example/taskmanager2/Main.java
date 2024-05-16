@@ -1,8 +1,10 @@
 package com.example.taskmanager2;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -22,7 +24,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        VBox root = new VBox();
+        VBox root = new VBox(10); // 10px padding between buttons
+        root.setAlignment(Pos.CENTER); // Center align all children of VBox
+
         Scene scene = new Scene(root, 400, 300);
 
         Button addButton = new Button("Lisa ülesanne");
@@ -67,6 +71,12 @@ public class Main extends Application {
             primaryStage.close();
         });
 
+        // Set VBox properties to center buttons
+        VBox.setVgrow(addButton, Priority.ALWAYS);
+        VBox.setVgrow(listButton, Priority.ALWAYS);
+        VBox.setVgrow(randomButton, Priority.ALWAYS);
+        VBox.setVgrow(closeButton, Priority.ALWAYS);
+
         root.getChildren().addAll(addButton, listButton, randomButton, closeButton);
 
         primaryStage.setScene(scene);
@@ -89,16 +99,21 @@ public class Main extends Application {
     public static Ülesanne lisaUusÜlesanne() {
         Dialog<Ülesanne> dialog = new Dialog<>();
         dialog.setTitle("Lisa uus ülesanne");
-        dialog.setHeaderText("Sisesta ülesande info formaadis (tüüp, tähtaeg, aine)");
+        dialog.setHeaderText("Sisesta ülesande info");
 
         Label typeLabel = new Label("Tüüp:");
-        TextField typeField = new TextField();
+        ComboBox<String> typeComboBox = new ComboBox<>();
+        typeComboBox.getItems().addAll("Kontrolltöö", "Rühmatöö", "Praktikum", "Kodutöö");
+        typeComboBox.setValue("Kontrolltöö"); // Default value
+
         Label dateLabel = new Label("Tähtaeg (yyyy-mm-dd):");
         TextField dateField = new TextField();
         Label subjectLabel = new Label("Aine:");
         TextField subjectField = new TextField();
 
-        VBox vbox = new VBox(typeLabel, typeField, dateLabel, dateField, subjectLabel, subjectField);
+        VBox vbox = new VBox(10, typeLabel, typeComboBox, dateLabel, dateField, subjectLabel, subjectField);
+        vbox.setAlignment(Pos.CENTER_LEFT);
+
         dialog.getDialogPane().setContent(vbox);
 
         ButtonType confirmButtonType = new ButtonType("Lisa", ButtonBar.ButtonData.OK_DONE);
@@ -106,7 +121,7 @@ public class Main extends Application {
 
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == confirmButtonType) {
-                String type = typeField.getText();
+                String type = typeComboBox.getValue();
                 String date = dateField.getText();
                 String subject = subjectField.getText();
                 try {
