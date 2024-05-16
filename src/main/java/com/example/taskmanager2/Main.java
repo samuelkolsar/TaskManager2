@@ -15,9 +15,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class Main extends Application {
     private List<Ülesanne> ülesanded = new ArrayList<>();
@@ -39,8 +41,6 @@ public class Main extends Application {
             if (uusÜlesanne != null) {
                 ülesanded.add(uusÜlesanne);
                 showAlert(Alert.AlertType.INFORMATION, "Ülesanne lisatud!");
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Vale formaat, ülesannet ei lisatud!");
             }
         });
 
@@ -91,7 +91,7 @@ public class Main extends Application {
         }
     }
 
-    private void showAlert(Alert.AlertType alertType, String message) {
+    private static void showAlert(Alert.AlertType alertType, String message) {
         Alert alert = new Alert(alertType, message);
         alert.showAndWait();
     }
@@ -127,14 +127,16 @@ public class Main extends Application {
                 try {
                     LocalDate deadline = LocalDate.parse(date);
                     return createÜlesanne(type, deadline, subject);
-                } catch (Exception e) {
+                } catch (DateTimeParseException e) {
+                    showAlert(Alert.AlertType.INFORMATION, "Vale kuupäeva formaat! Palun sisestage kuupäev kujul yyyy-mm-dd.");
                     return null;
                 }
             }
             return null;
         });
 
-        return dialog.showAndWait().orElse(null);
+        Optional<Ülesanne> result = dialog.showAndWait();
+        return result.orElse(null);
     }
 
     private static Ülesanne createÜlesanne(String type, LocalDate deadline, String subject) {
