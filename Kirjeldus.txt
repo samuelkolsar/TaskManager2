@@ -1,0 +1,33 @@
+Rühmatöö 2 - Karl Laine, Samuel Kolsar
+
+Projekt: Teha kalender, kuhu saab juurde lisada ülesandeid juurde, mida on vaja teha ning vaadata, missuguseid ülesandeid vaja teha on. Võimalus on ka valida suvaline ülesanne.
+
+Klassid: (nende eraldi eesmärk ja olulisemad meetodid)
+
+Peaklass –  Meetodid:
+lisaUusÜlesanne  - lisab juurde sinu soovitud ülesande
+loeÜlesanded  -  Loeb failist listi sinu ülesanded
+loeFaili – kirjutab listi tagasi faili originaalses formaadis.
+Main – küsib kasutajalt soovitud tegevust ja täidab selle.
+
+Rühmatöö – klass Ülesanne alamklass
+Praktikum – klass Ülesanne alamklass
+Kontrolltöö –  klass Ülesanne alamklass
+Kodutöö –  klass Ülesanne alamklass
+Ülesanne -  Ülemklass, kus alamklassid kasutavad getAine() ja getTähtaeg() meetodeid.
+
+Protsess:
+
+Etapiks oli meie eelmise rühmatöö viimine graafilisele liidesele. Etapil osalesid kõik rühmaliikmed.
+
+Rühmaliikmete panus: Kõik rühmaliikmed panustasid võrdselt. Koos tegelesime, et kõik tekstid saaksid väljastatud graafilisel liidesel. Kokku läks orienteeruvalt 6 tundi.
+
+Tegemise mured: Alert tüüpi sõnumeid oli keeruline koostada, kuidas neid täpsemalt disainida.
+
+Hinnang: Algse projektiga oleme rahul. Saime hakkama JavaFX kasutusega ning jäime rahule oma tööga. Arendamist vajaks visuaalne osa programmist.
+
+Näited, kuidas testisime: Tegime programmis muudatusi, jooksutasime ja vaatasime, missugune väljund tuli. Kui ei meeldinud, siis muutsime koodis ümber.
+
+
+
+
