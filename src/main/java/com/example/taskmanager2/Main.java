@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -29,12 +30,14 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         VBox root = new VBox(10);
         root.setAlignment(Pos.CENTER);
+        root.setPadding(new Insets(20));
 
-        BackgroundFill backgroundFill = new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY);
-        Background background = new Background(backgroundFill);
-        root.setBackground(background);
+        // Taustapildi lisamine
+        Image backgroundImage = new Image(getClass().getResourceAsStream("/Ye.jpg"));
+        BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
+        root.setBackground(new Background(background));
 
-        Scene scene = new Scene(root, 400, 300);
+        Scene scene = new Scene(root, 500, 350);
 
         Button addButton = new Button("Lisa ülesanne");
         Button listButton = new Button("Vaata ülesandeid");
