@@ -1,2 +1,9 @@
 rühmatöö;2024-05-29;MMP;Karl Laine, Peeter Änilane
+kontrolltöö;2024-05-29;asdasd
+kontrolltöö;2024-05-29;adasdasdasd
+kontrolltöö;2024-05-29;erterterterter
+kontrolltöö;2024-05-29;fasfasfasfasf
+kontrolltöö;2024-06-09;OOP
 rühmatöö;2024-08-29;MMP;Markus Antonov
+kontrolltöö;2025-05-05;jsdfsdfsd
+kontrolltöö;2026-05-05;sjdfksdf

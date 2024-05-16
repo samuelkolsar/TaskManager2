@@ -32,7 +32,7 @@ public class Main extends Application {
         Scene scene = new Scene(root, 400, 300);
 
         Button addButton = new Button("Lisa ülesanne");
-        Button listButton = new Button("Väljasta ülesanded ekraanile");
+        Button listButton = new Button("Vaata ülesandeid");
         Button randomButton = new Button("Vali suvaline ülesanne");
         Button closeButton = new Button("Sulge programm");
 
@@ -40,33 +40,104 @@ public class Main extends Application {
             Ülesanne uusÜlesanne = lisaUusÜlesanne();
             if (uusÜlesanne != null) {
                 ülesanded.add(uusÜlesanne);
-                showAlert(Alert.AlertType.INFORMATION, "Ülesanne lisatud!");
+                näitaTeavitust(Alert.AlertType.INFORMATION, "Ülesanne lisatud!");
             }
         });
 
         listButton.setOnAction(e -> {
             Collections.sort(ülesanded);
-            StringBuilder sb = new StringBuilder();
+            VBox container = new VBox(10); // VBox to contain the tasks
+            container.setAlignment(Pos.CENTER); // Center align the tasks vertically
+
+            // Create a Label to display the tasks
+            Label tasksLabel = new Label();
+            tasksLabel.setAlignment(Pos.CENTER); // Center align the text horizontally
+            tasksLabel.setWrapText(true); // Allow the text to wrap within the label
+
+            // Create a StringBuilder to build the tasks text
+            StringBuilder tasksText = new StringBuilder();
             for (Ülesanne ülesanne : ülesanded) {
-                sb.append(ülesanne).append("\n");
+                tasksText.append(ülesanne).append("\n");
             }
-            showAlert(Alert.AlertType.INFORMATION, sb.toString());
+            // Set the tasks text to the Label
+            tasksLabel.setText(tasksText.toString());
+
+            // Add the Label to the container
+            container.getChildren().add(tasksLabel);
+
+            // Create a ScrollPane and set its content to the VBox
+            ScrollPane scrollPane = new ScrollPane(container);
+            scrollPane.setFitToWidth(true); // Allow the ScrollPane to adjust its width to fit the content
+
+            // Create a new Stage for the dialog and set its scene to contain the ScrollPane
+            Stage dialogStage = new Stage();
+            dialogStage.setScene(new Scene(scrollPane));
+            dialogStage.setTitle("Ülesannete nimekiri");
+
+            // Set listener to adjust ScrollPane size when main VBox size changes
+            primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
+                scrollPane.setPrefWidth(primaryStage.getWidth());
+            });
+            primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
+                scrollPane.setPrefHeight(primaryStage.getHeight());
+            });
+
+            dialogStage.show();
         });
+
+
 
         randomButton.setOnAction(e -> {
             if (!ülesanded.isEmpty()) {
                 Ülesanne suvaline = ülesanded.get((int) (Math.random() * ülesanded.size()));
-                showAlert(Alert.AlertType.INFORMATION, suvaline.toString());
+
+                Label taskLabel = new Label(suvaline.toString());
+                taskLabel.setAlignment(Pos.CENTER);
+
+                Button closeButton2 = new Button("Sulge");
+                closeButton2.setOnAction(event -> {
+                    ((Stage) closeButton2.getScene().getWindow()).close();
+                });
+
+                VBox root2 = new VBox(10, taskLabel, closeButton2);
+                root2.setAlignment(Pos.CENTER);
+
+                Scene scene2 = new Scene(root2);
+                Stage randomTaskStage = new Stage();
+                randomTaskStage.setScene(scene2);
+
+                // Set the scene size based on the text size
+                scene2.widthProperty().addListener((obs, oldVal, newVal) -> {
+                    double textWidth = taskLabel.getBoundsInLocal().getWidth();
+                    randomTaskStage.setWidth(textWidth + 100); // Add some padding
+                });
+                scene2.heightProperty().addListener((obs, oldVal, newVal) -> {
+                    double textHeight = taskLabel.getBoundsInLocal().getHeight();
+                    randomTaskStage.setHeight(textHeight + 100); // Add some padding
+                });
+
+                randomTaskStage.setTitle("Suvaline ülesanne");
+                randomTaskStage.show();
             } else {
-                showAlert(Alert.AlertType.INFORMATION, "Ülesannete nimekiri on tühi.");
+                näitaTeavitust(Alert.AlertType.INFORMATION, "Ülesannete nimekiri on tühi.");
             }
+        });
+
+
+        primaryStage.setOnCloseRequest(e -> {
+            try {
+                loeFaili(ülesanded);
+            } catch (IOException ex) {
+                näitaTeavitust(Alert.AlertType.ERROR, "Tekkis viga faili salvestamisel!");
+            }
+            primaryStage.close();
         });
 
         closeButton.setOnAction(e -> {
             try {
                 loeFaili(ülesanded);
             } catch (IOException ex) {
-                showAlert(Alert.AlertType.ERROR, "Tekkis viga failisse salvestamisel!");
+                näitaTeavitust(Alert.AlertType.ERROR, "Faili salvestamisel tekkis viga!");
             }
             primaryStage.close();
         });
@@ -91,7 +162,7 @@ public class Main extends Application {
         }
     }
 
-    private static void showAlert(Alert.AlertType alertType, String message) {
+    private static void näitaTeavitust(Alert.AlertType alertType, String message) {
         Alert alert = new Alert(alertType, message);
         alert.showAndWait();
     }
@@ -128,7 +199,7 @@ public class Main extends Application {
                     LocalDate deadline = LocalDate.parse(date);
                     return createÜlesanne(type, deadline, subject);
                 } catch (DateTimeParseException e) {
-                    showAlert(Alert.AlertType.INFORMATION, "Vale kuupäeva formaat! Palun sisestage kuupäev kujul yyyy-mm-dd.");
+                    näitaTeavitust(Alert.AlertType.ERROR, "Vale kuupäeva formaat! Palun sisestage kuupäev kujul yyyy-mm-dd.");
                     return null;
                 }
             }
