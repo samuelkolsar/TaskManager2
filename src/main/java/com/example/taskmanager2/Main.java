@@ -1,11 +1,12 @@
 package com.example.taskmanager2;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -26,8 +27,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        VBox root = new VBox(10); // 10px padding between buttons
-        root.setAlignment(Pos.CENTER); // Center align all children of VBox
+        VBox root = new VBox(10);
+        root.setAlignment(Pos.CENTER);
+
+        BackgroundFill backgroundFill = new BackgroundFill(Color.DARKGRAY, CornerRadii.EMPTY, Insets.EMPTY);
+        Background background = new Background(backgroundFill);
+        root.setBackground(background);
 
         Scene scene = new Scene(root, 400, 300);
 
@@ -44,49 +49,42 @@ public class Main extends Application {
             }
         });
 
+
         listButton.setOnAction(e -> {
             Collections.sort(ülesanded);
-            VBox container = new VBox(10); // VBox to contain the tasks
-            container.setAlignment(Pos.CENTER); // Center align the tasks vertically
+            VBox container = new VBox(10);
+            container.setAlignment(Pos.CENTER);
 
-            // Create a Label to display the tasks
             Label tasksLabel = new Label();
-            tasksLabel.setAlignment(Pos.CENTER); // Center align the text horizontally
-            tasksLabel.setWrapText(true); // Allow the text to wrap within the label
+            tasksLabel.setAlignment(Pos.CENTER);
+            tasksLabel.setWrapText(true);
 
-            // Create a StringBuilder to build the tasks text
             StringBuilder tasksText = new StringBuilder();
             for (Ülesanne ülesanne : ülesanded) {
                 tasksText.append(ülesanne).append("\n");
             }
-            // Set the tasks text to the Label
-            tasksLabel.setText(tasksText.toString());
 
-            // Add the Label to the container
+            tasksLabel.setText(tasksText.toString());
             container.getChildren().add(tasksLabel);
 
-            // Create a ScrollPane and set its content to the VBox
             ScrollPane scrollPane = new ScrollPane(container);
-            scrollPane.setFitToWidth(true); // Allow the ScrollPane to adjust its width to fit the content
+            scrollPane.setFitToWidth(true);
 
-            // Create a new Stage for the dialog and set its scene to contain the ScrollPane
             Stage dialogStage = new Stage();
             dialogStage.setScene(new Scene(scrollPane));
             dialogStage.setTitle("Ülesannete nimekiri");
 
-            // Set listener to adjust ScrollPane size when main VBox size changes
             primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
                 scrollPane.setPrefWidth(primaryStage.getWidth());
             });
             primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
                 scrollPane.setPrefHeight(primaryStage.getHeight());
             });
-
             dialogStage.show();
         });
 
 
-
+        //Vali suvaline ülesanne
         randomButton.setOnAction(e -> {
             if (!ülesanded.isEmpty()) {
                 Ülesanne suvaline = ülesanded.get((int) (Math.random() * ülesanded.size()));
@@ -106,14 +104,13 @@ public class Main extends Application {
                 Stage randomTaskStage = new Stage();
                 randomTaskStage.setScene(scene2);
 
-                // Set the scene size based on the text size
                 scene2.widthProperty().addListener((obs, oldVal, newVal) -> {
                     double textWidth = taskLabel.getBoundsInLocal().getWidth();
-                    randomTaskStage.setWidth(textWidth + 100); // Add some padding
+                    randomTaskStage.setWidth(textWidth + 100);
                 });
                 scene2.heightProperty().addListener((obs, oldVal, newVal) -> {
                     double textHeight = taskLabel.getBoundsInLocal().getHeight();
-                    randomTaskStage.setHeight(textHeight + 100); // Add some padding
+                    randomTaskStage.setHeight(textHeight + 100);
                 });
 
                 randomTaskStage.setTitle("Suvaline ülesanne");
@@ -123,7 +120,7 @@ public class Main extends Application {
             }
         });
 
-
+        //Akna sulgemisel faili salvestamine
         primaryStage.setOnCloseRequest(e -> {
             try {
                 loeFaili(ülesanded);
@@ -132,7 +129,6 @@ public class Main extends Application {
             }
             primaryStage.close();
         });
-
         closeButton.setOnAction(e -> {
             try {
                 loeFaili(ülesanded);
@@ -142,7 +138,7 @@ public class Main extends Application {
             primaryStage.close();
         });
 
-        // Set VBox properties to center buttons
+
         VBox.setVgrow(addButton, Priority.ALWAYS);
         VBox.setVgrow(listButton, Priority.ALWAYS);
         VBox.setVgrow(randomButton, Priority.ALWAYS);
@@ -162,6 +158,7 @@ public class Main extends Application {
         }
     }
 
+
     private static void näitaTeavitust(Alert.AlertType alertType, String message) {
         Alert alert = new Alert(alertType, message);
         alert.showAndWait();
@@ -175,7 +172,7 @@ public class Main extends Application {
         Label typeLabel = new Label("Tüüp:");
         ComboBox<String> typeComboBox = new ComboBox<>();
         typeComboBox.getItems().addAll("Kontrolltöö", "Rühmatöö", "Praktikum", "Kodutöö");
-        typeComboBox.setValue("Kontrolltöö"); // Default value
+        typeComboBox.setValue("Kontrolltöö");
 
         Label dateLabel = new Label("Tähtaeg (yyyy-mm-dd):");
         TextField dateField = new TextField();
@@ -259,6 +256,7 @@ public class Main extends Application {
         }
         return ülesanded;
     }
+
 
     public static void loeFaili(List<Ülesanne> ülesanded) throws IOException {
         String fail = "toDo.txt";
